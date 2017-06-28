@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/tgrdt/Documents/Code/tmp_Taquin/Dawin_Taquin/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="308cef41dc78cbac232db6a97202c72c295e56a3">
+        <dex dex="/Users/tgrdt/Documents/Code/tmp_Taquin/Dawin_Taquin/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_c17d1114bd6fb0729bf4a046095d37c4044530a4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/tgrdt/Documents/Code/tmp_Taquin/Dawin_Taquin/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/Users/tgrdt/Documents/Code/tmp_Taquin/Dawin_Taquin/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_d634cfc04e77e13ac74c5af166efbb9f1a164bd9/classes.dex" />
+    </item>
+
+</items>

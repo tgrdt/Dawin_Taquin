@@ -11,6 +11,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by tgirardot on 26/06/17.
@@ -46,7 +47,7 @@ public class GameActivity extends Activity {
 
         GridView gridview = (GridView) findViewById(R.id.gridview_game);
         gridview.setNumColumns(sizeGrille);
-        gridview.setAdapter(new ImageAdapterBitmap(this, mThumbIds));
+
 
         switch(numPic) {
             case 0:
@@ -230,10 +231,24 @@ public class GameActivity extends Activity {
 
         Bitmap matrixGrilleOriginel[][] = createMatrice(sizeGrille, mThumbIds);
 
-        Bitmap matrixGrillePuzzled[][] = null;
+        //Bitmap matrixGrillePuzzled[][] = null;
+
+        //mThumbPuzzled = matrixToArray(sizeGrille, matrixGrilleOriginel);
+
+        mThumbPuzzled = randomizeGrid(sizeGrille, mThumbIds, matrixGrilleOriginel);
+        mThumbPuzzled = randomizeGrid(sizeGrille, mThumbPuzzled, matrixGrilleOriginel);
+
+        Log.d("Test", "mThumbIds = " + mThumbIds);
+        Log.d("Test", "mThumbPuz = " + mThumbPuzzled);
+
+        if(mThumbPuzzled.equals(mThumbIds)) {
+            Log.d("test", "ELLES SONT IDENTIQUES");
+        } else {
+            Log.d("test", "ELLES NE SONT PAS IDENTIQUE");
+        }
 
 
-
+        gridview.setAdapter(new ImageAdapterBitmap(this, mThumbPuzzled));
 
         Button buttonStart = (Button) findViewById(R.id.buttonStart);
         Log.d("Toto", "tot");
@@ -264,6 +279,97 @@ public class GameActivity extends Activity {
 
         Log.d("Test", "fin while");
         return matrixGrille;
+    }
+
+    public ArrayList<Bitmap> matrixToArray(int sizeGrille, Bitmap matrice[][]) {
+
+        // Log.d("test", "Entree matrix to array");
+
+        ArrayList<Bitmap> listFromMatrix = new ArrayList<>();
+        for(int i = 0; i < sizeGrille; i++) {
+            for(int j = 0; j < sizeGrille; j++) {
+                //Log.d("test", "Entree matrix to array add");
+                listFromMatrix.add(matrice[i][j]);
+                // Log.d("test", "Entree matrix to array after add");
+            }
+        }
+
+        //  Log.d("test", "fin matrix to array");
+
+        return listFromMatrix;
+    }
+
+    public ArrayList<Bitmap> randomizeGrid(int sizeGrille, ArrayList<Bitmap> bitmapsOriginel, Bitmap matriceOriginel[][] ) {
+
+        Bitmap emptyCase = bitmapsOriginel.get((bitmapsOriginel.size() - 1));
+        Bitmap matrixGrille[][] = new Bitmap[sizeGrille][sizeGrille];
+
+        ArrayList<Bitmap> randomGrid = new ArrayList<>();
+        boolean changement = false;
+        Log.d("test", "Entree RandomizeGrid");
+
+        matrixGrille = createMatrice(sizeGrille, bitmapsOriginel);
+
+        for (int x = 0; x < 200; x++) {
+
+            for(int i = 0; i < sizeGrille; i++) {
+                for(int j = 0; j < sizeGrille; j++) {
+
+                    changement = false;
+
+                    if(matrixGrille[i][j] == emptyCase) {
+
+                        Random rand = new Random();
+                        int tmpRand = (int )(Math.random() * 4) + 1;
+                        // rand.nextInt(4)+1; //starts at 0, so add 1
+
+                        switch (tmpRand) {
+                            case 1: // cas haut
+                                if(j > 0) {
+                                    matrixGrille[i][j] = matrixGrille[i][j - 1];
+                                    matrixGrille[i][j - 1] = emptyCase;
+                                    changement = true;
+
+                                }
+                                break;
+                            case 2: // cas droit
+                                if( i < (sizeGrille - 1 )) {
+                                    matrixGrille[i][j] = matrixGrille[i + 1][j];
+                                    matrixGrille[i + 1][j] = emptyCase;
+                                    changement = true;
+                                }
+                                break;
+                            case 3: // cas bas
+                                if(j > (sizeGrille - 1)) {
+                                    matrixGrille[i][j] = matrixGrille[i][j + 1];
+                                    matrixGrille[i][j + 1] = emptyCase;
+                                    changement = true;
+                                }
+                                break;
+                            case 4: // cas gauche
+                                if( i > 0) {
+                                    matrixGrille[i][j] = matrixGrille[i - 1][j];
+                                    matrixGrille[i - 1][j] = emptyCase;
+                                    changement = true;
+                                }
+                                break;
+                        }
+
+                    }
+
+                    randomGrid = matrixToArray(sizeGrille, matrixGrille);
+                    matrixGrille = createMatrice(sizeGrille, randomGrid);
+                }
+            }
+
+
+        }
+
+         randomGrid = matrixToArray(sizeGrille, matrixGrille);
+
+        //  Log.d("test", "Fin  RandomizeGrid");
+
+        return randomGrid;
     }
 
 
