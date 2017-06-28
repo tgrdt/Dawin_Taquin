@@ -23,6 +23,9 @@ public class GameActivity extends Activity {
 
     private ArrayList<Bitmap> mThumbIds = new ArrayList<>();
 
+    private ArrayList<Bitmap> mThumbOriginal = new ArrayList<>();
+    private ArrayList<Bitmap> mThumbPuzzled = new ArrayList<>();
+
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -41,7 +44,7 @@ public class GameActivity extends Activity {
 
         GridView gridview = (GridView) findViewById(R.id.gridview_game);
         gridview.setNumColumns(sizeGrille);
-        gridview.setAdapter(new ImageAdapterBitmap(this, mThumbIds));
+        gridview.setAdapter(new ImageAdapterBitmap(this, mThumbPuzzled));
 
         switch(numPic) {
             case 0:
@@ -99,6 +102,19 @@ public class GameActivity extends Activity {
                     }
                 }
                 Log.d("sizeGrille", "je suis passee dans la boucle");
+                mThumbOriginal = mThumbIds;
+                mThumbPuzzled.add(mThumbIds.get(3));
+                mThumbPuzzled.add(mThumbIds.get(6));
+                mThumbPuzzled.add(mThumbIds.get(2));
+
+                mThumbPuzzled.add(mThumbIds.get(7));
+                mThumbPuzzled.add(mThumbIds.get(5));
+                mThumbPuzzled.add(mThumbIds.get(1));
+
+                mThumbPuzzled.add(mThumbIds.get(0));
+                mThumbPuzzled.add(mThumbIds.get(5));
+                mThumbPuzzled.add(mThumbIds.get(8));
+
 
                 break;
             case 4:
@@ -110,6 +126,27 @@ public class GameActivity extends Activity {
 
                     }
                 }
+                mThumbOriginal = mThumbIds;
+                mThumbPuzzled.add(mThumbIds.get(5));
+                mThumbPuzzled.add(mThumbIds.get(9));
+                mThumbPuzzled.add(mThumbIds.get(12));
+                mThumbPuzzled.add(mThumbIds.get(0));
+
+                mThumbPuzzled.add(mThumbIds.get(8));
+                mThumbPuzzled.add(mThumbIds.get(11));
+                mThumbPuzzled.add(mThumbIds.get(1));
+                mThumbPuzzled.add(mThumbIds.get(3));
+
+                mThumbPuzzled.add(mThumbIds.get(2));
+                mThumbPuzzled.add(mThumbIds.get(13));
+                mThumbPuzzled.add(mThumbIds.get(7));
+                mThumbPuzzled.add(mThumbIds.get(14));
+
+                mThumbPuzzled.add(mThumbIds.get(10));
+                mThumbPuzzled.add(mThumbIds.get(4));
+                mThumbPuzzled.add(mThumbIds.get(6));
+                mThumbPuzzled.add(mThumbIds.get(15));
+
                 break;
             case 5:
                 int by5 = _width / 5;
@@ -121,6 +158,39 @@ public class GameActivity extends Activity {
                     }
                 }
 
+                mThumbOriginal = mThumbIds;
+
+                mThumbPuzzled.add(mThumbIds.get(19));
+                mThumbPuzzled.add(mThumbIds.get(11));
+                mThumbPuzzled.add(mThumbIds.get(9));
+                mThumbPuzzled.add(mThumbIds.get(16));
+                mThumbPuzzled.add(mThumbIds.get(6));
+
+                mThumbPuzzled.add(mThumbIds.get(10));
+                mThumbPuzzled.add(mThumbIds.get(3));
+                mThumbPuzzled.add(mThumbIds.get(5));
+                mThumbPuzzled.add(mThumbIds.get(21));
+                mThumbPuzzled.add(mThumbIds.get(23));
+
+                mThumbPuzzled.add(mThumbIds.get(15));
+                mThumbPuzzled.add(mThumbIds.get(12));
+                mThumbPuzzled.add(mThumbIds.get(22));
+                mThumbPuzzled.add(mThumbIds.get(7));
+                mThumbPuzzled.add(mThumbIds.get(14));
+
+                mThumbPuzzled.add(mThumbIds.get(13));
+                mThumbPuzzled.add(mThumbIds.get(4));
+                mThumbPuzzled.add(mThumbIds.get(1));
+                mThumbPuzzled.add(mThumbIds.get(20));
+                mThumbPuzzled.add(mThumbIds.get(8));
+
+                mThumbPuzzled.add(mThumbIds.get(0));
+                mThumbPuzzled.add(mThumbIds.get(17));
+                mThumbPuzzled.add(mThumbIds.get(2));
+                mThumbPuzzled.add(mThumbIds.get(18));
+                mThumbPuzzled.add(mThumbIds.get(24));
+
+
                 break;
             default:
                 int by6 = _width / 3;
@@ -130,8 +200,16 @@ public class GameActivity extends Activity {
                         mThumbIds.add(Bitmap.createBitmap(toPuzzle,by6 * j, by6 * i, by6, by6  ));
 
                     }
-                }break;
+                }
+                mThumbOriginal = mThumbIds;
+                break;
         }
+
+
+
+
+
+
 
 
 
