@@ -18,11 +18,13 @@ import java.util.ArrayList;
 public class GameActivity extends Activity {
 
     private Bitmap toPuzzle = null;
+    private Bitmap btn_tmp = null;
+
     private int _width;
+
     private GridView game_layout;
 
     private ArrayList<Bitmap> mThumbIds = new ArrayList<>();
-
     private ArrayList<Bitmap> mThumbOriginal = new ArrayList<>();
     private ArrayList<Bitmap> mThumbPuzzled = new ArrayList<>();
 
@@ -44,7 +46,7 @@ public class GameActivity extends Activity {
 
         GridView gridview = (GridView) findViewById(R.id.gridview_game);
         gridview.setNumColumns(sizeGrille);
-        gridview.setAdapter(new ImageAdapterBitmap(this, mThumbPuzzled));
+        gridview.setAdapter(new ImageAdapterBitmap(this, mThumbIds));
 
         switch(numPic) {
             case 0:
@@ -102,6 +104,17 @@ public class GameActivity extends Activity {
                     }
                 }
                 Log.d("sizeGrille", "je suis passee dans la boucle");
+
+                mThumbIds.remove(8);
+                Log.d("Test", "Before create");
+                btn_tmp = Bitmap.createBitmap(by3,by3, Bitmap.Config.ALPHA_8);
+                Log.d("Test", "after create");
+                mThumbIds.add(btn_tmp);
+                Log.d("Test", "after add");
+
+//                Log.d("Matrix", "MATRIX : " + matrixGrille);
+
+                /*
                 mThumbOriginal = mThumbIds;
                 mThumbPuzzled.add(mThumbIds.get(3));
                 mThumbPuzzled.add(mThumbIds.get(6));
@@ -114,7 +127,7 @@ public class GameActivity extends Activity {
                 mThumbPuzzled.add(mThumbIds.get(0));
                 mThumbPuzzled.add(mThumbIds.get(5));
                 mThumbPuzzled.add(mThumbIds.get(8));
-
+                */
 
                 break;
             case 4:
@@ -126,6 +139,11 @@ public class GameActivity extends Activity {
 
                     }
                 }
+
+                mThumbIds.remove(15);
+                btn_tmp = Bitmap.createBitmap(by4,by4, Bitmap.Config.ALPHA_8);
+                mThumbIds.add(btn_tmp);
+                /*
                 mThumbOriginal = mThumbIds;
                 mThumbPuzzled.add(mThumbIds.get(5));
                 mThumbPuzzled.add(mThumbIds.get(9));
@@ -146,6 +164,7 @@ public class GameActivity extends Activity {
                 mThumbPuzzled.add(mThumbIds.get(4));
                 mThumbPuzzled.add(mThumbIds.get(6));
                 mThumbPuzzled.add(mThumbIds.get(15));
+                */
 
                 break;
             case 5:
@@ -157,6 +176,10 @@ public class GameActivity extends Activity {
 
                     }
                 }
+                mThumbIds.remove(24);
+                btn_tmp = Bitmap.createBitmap(by5,by5, Bitmap.Config.ALPHA_8);
+                mThumbIds.add(btn_tmp);
+                /*
 
                 mThumbOriginal = mThumbIds;
 
@@ -189,7 +212,7 @@ public class GameActivity extends Activity {
                 mThumbPuzzled.add(mThumbIds.get(2));
                 mThumbPuzzled.add(mThumbIds.get(18));
                 mThumbPuzzled.add(mThumbIds.get(24));
-
+*/
 
                 break;
             default:
@@ -205,10 +228,9 @@ public class GameActivity extends Activity {
                 break;
         }
 
+        Bitmap matrixGrilleOriginel[][] = createMatrice(sizeGrille, mThumbIds);
 
-
-
-
+        Bitmap matrixGrillePuzzled[][] = null;
 
 
 
@@ -220,6 +242,28 @@ public class GameActivity extends Activity {
 
 
 
+    }
+
+    public Bitmap[][] createMatrice(int sizeGrille, ArrayList<Bitmap> bitmaps){
+
+        Log.d("Test", "entree fonction");
+
+        Bitmap matrixGrille[][] = new Bitmap[sizeGrille][sizeGrille];
+        int listLenght = bitmaps.size();
+        int tmp = 0;
+        while(tmp < listLenght) {
+            for(int i = 0; i < sizeGrille; i++) {
+                Log.d("Test", "entree boucle 1");
+                for(int j = 0; j < sizeGrille; j++) {
+                    Log.d("Test", "entree boucle 2");
+                    matrixGrille[i][j] = bitmaps.get(tmp);
+                    tmp = tmp + 1;
+                }
+            }
+        }
+
+        Log.d("Test", "fin while");
+        return matrixGrille;
     }
 
 
