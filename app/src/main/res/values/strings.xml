@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Taquin_Girardot</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="bouton1">3*3</string>
+    <string name="bouton2">4*4</string>
+    <string name="bouton3">5*5</string>
+    <string name="bouton4">Jouer</string>
+    <string name="boutonStart">Lancer la partie</string>
+    <string name="text_view_id1">Veuillez choisir une taille</string>
+    <string name="text_view_id1_3">Vous avez choisis la taille 3*3</string>
+    <string name="text_view_id1_4">Vous avez choisis la taille 4*4</string>
+    <string name="text_view_id1_5">Vous avez choisis la taille 5*5</string>
+</resources>
