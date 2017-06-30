@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -20,8 +22,11 @@ public class GameActivity extends Activity {
 
     private Bitmap toPuzzle = null;
     private Bitmap btn_tmp = null;
+    private Bitmap emptyCase = null;
 
     private int _width;
+
+    private boolean _mouvement = false;
 
     private GridView game_layout;
 
@@ -38,7 +43,7 @@ public class GameActivity extends Activity {
         setContentView(R.layout.acitivity_game);
 
         Intent intent = getIntent();
-        int sizeGrille = intent.getIntExtra("selectedSize", 0);
+        final int sizeGrille = intent.getIntExtra("selectedSize", 0);
 
         int numPic = intent.getIntExtra("selectedImage", 0);
 
@@ -112,23 +117,7 @@ public class GameActivity extends Activity {
                 Log.d("Test", "after create");
                 mThumbIds.add(btn_tmp);
                 Log.d("Test", "after add");
-
-//                Log.d("Matrix", "MATRIX : " + matrixGrille);
-
-                /*
-                mThumbOriginal = mThumbIds;
-                mThumbPuzzled.add(mThumbIds.get(3));
-                mThumbPuzzled.add(mThumbIds.get(6));
-                mThumbPuzzled.add(mThumbIds.get(2));
-
-                mThumbPuzzled.add(mThumbIds.get(7));
-                mThumbPuzzled.add(mThumbIds.get(5));
-                mThumbPuzzled.add(mThumbIds.get(1));
-
-                mThumbPuzzled.add(mThumbIds.get(0));
-                mThumbPuzzled.add(mThumbIds.get(5));
-                mThumbPuzzled.add(mThumbIds.get(8));
-                */
+                emptyCase = btn_tmp;
 
                 break;
             case 4:
@@ -144,28 +133,7 @@ public class GameActivity extends Activity {
                 mThumbIds.remove(15);
                 btn_tmp = Bitmap.createBitmap(by4,by4, Bitmap.Config.ALPHA_8);
                 mThumbIds.add(btn_tmp);
-                /*
-                mThumbOriginal = mThumbIds;
-                mThumbPuzzled.add(mThumbIds.get(5));
-                mThumbPuzzled.add(mThumbIds.get(9));
-                mThumbPuzzled.add(mThumbIds.get(12));
-                mThumbPuzzled.add(mThumbIds.get(0));
-
-                mThumbPuzzled.add(mThumbIds.get(8));
-                mThumbPuzzled.add(mThumbIds.get(11));
-                mThumbPuzzled.add(mThumbIds.get(1));
-                mThumbPuzzled.add(mThumbIds.get(3));
-
-                mThumbPuzzled.add(mThumbIds.get(2));
-                mThumbPuzzled.add(mThumbIds.get(13));
-                mThumbPuzzled.add(mThumbIds.get(7));
-                mThumbPuzzled.add(mThumbIds.get(14));
-
-                mThumbPuzzled.add(mThumbIds.get(10));
-                mThumbPuzzled.add(mThumbIds.get(4));
-                mThumbPuzzled.add(mThumbIds.get(6));
-                mThumbPuzzled.add(mThumbIds.get(15));
-                */
+                emptyCase = btn_tmp;
 
                 break;
             case 5:
@@ -180,40 +148,7 @@ public class GameActivity extends Activity {
                 mThumbIds.remove(24);
                 btn_tmp = Bitmap.createBitmap(by5,by5, Bitmap.Config.ALPHA_8);
                 mThumbIds.add(btn_tmp);
-                /*
-
-                mThumbOriginal = mThumbIds;
-
-                mThumbPuzzled.add(mThumbIds.get(19));
-                mThumbPuzzled.add(mThumbIds.get(11));
-                mThumbPuzzled.add(mThumbIds.get(9));
-                mThumbPuzzled.add(mThumbIds.get(16));
-                mThumbPuzzled.add(mThumbIds.get(6));
-
-                mThumbPuzzled.add(mThumbIds.get(10));
-                mThumbPuzzled.add(mThumbIds.get(3));
-                mThumbPuzzled.add(mThumbIds.get(5));
-                mThumbPuzzled.add(mThumbIds.get(21));
-                mThumbPuzzled.add(mThumbIds.get(23));
-
-                mThumbPuzzled.add(mThumbIds.get(15));
-                mThumbPuzzled.add(mThumbIds.get(12));
-                mThumbPuzzled.add(mThumbIds.get(22));
-                mThumbPuzzled.add(mThumbIds.get(7));
-                mThumbPuzzled.add(mThumbIds.get(14));
-
-                mThumbPuzzled.add(mThumbIds.get(13));
-                mThumbPuzzled.add(mThumbIds.get(4));
-                mThumbPuzzled.add(mThumbIds.get(1));
-                mThumbPuzzled.add(mThumbIds.get(20));
-                mThumbPuzzled.add(mThumbIds.get(8));
-
-                mThumbPuzzled.add(mThumbIds.get(0));
-                mThumbPuzzled.add(mThumbIds.get(17));
-                mThumbPuzzled.add(mThumbIds.get(2));
-                mThumbPuzzled.add(mThumbIds.get(18));
-                mThumbPuzzled.add(mThumbIds.get(24));
-*/
+                emptyCase = btn_tmp;
 
                 break;
             default:
@@ -225,7 +160,13 @@ public class GameActivity extends Activity {
 
                     }
                 }
-                mThumbOriginal = mThumbIds;
+                mThumbIds.remove(8);
+                Log.d("Test", "Before create");
+                btn_tmp = Bitmap.createBitmap(by6,by6, Bitmap.Config.ALPHA_8);
+                Log.d("Test", "after create");
+                mThumbIds.add(btn_tmp);
+                Log.d("Test", "after add");
+                emptyCase = btn_tmp;
                 break;
         }
 
@@ -248,36 +189,73 @@ public class GameActivity extends Activity {
         }
 
 
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                Log.d("test", "Image = " + mThumbPuzzled.get(position));
+                Bitmap tmpMatrix[][] = createMatrice(sizeGrille, mThumbPuzzled);
+
+                _mouvement = isMouvementOk(sizeGrille,emptyCase,position, mThumbPuzzled, tmpMatrix);
+                
+
+
+            }
+        });
+
         gridview.setAdapter(new ImageAdapterBitmap(this, mThumbPuzzled));
 
         Button buttonStart = (Button) findViewById(R.id.buttonStart);
         Log.d("Toto", "tot");
 
+    }
 
+    public boolean isMouvementOk(int sizeGrille, Bitmap emptyCase, int position, ArrayList<Bitmap> mThumb, Bitmap[][] matrice) {
 
+        boolean mouvementPossible = false;
 
+        for(int i = 0; i < sizeGrille; i++){
+            for(int j = 0; j < sizeGrille; j++) {
 
+                if(matrice[i][j] == mThumb.get(position)) {
+
+                    if( (j > 0) && (matrice[i ][j - 1] == emptyCase )){ // cas déplacement vers le haut
+                        mouvementPossible = true;
+                    }
+
+                    if( (j < (sizeGrille - 1)) && (matrice[i][j  + 1] == emptyCase )){ // cas déplacement vers le bas
+                        mouvementPossible = true;
+                    }
+
+                    if( (i < (sizeGrille - 1)) && (matrice[i + 1][j] == emptyCase )){ // cas déplacement vers la droite
+                        mouvementPossible = true;
+                    }
+
+                    if( (i > 0) && (matrice[i - 1][j] == emptyCase )){ // cas déplacement vers la droite
+                        mouvementPossible = true;
+                    }
+                }
+            }
+        }
+
+        return mouvementPossible;
     }
 
     public Bitmap[][] createMatrice(int sizeGrille, ArrayList<Bitmap> bitmaps){
-
-        Log.d("Test", "entree fonction");
 
         Bitmap matrixGrille[][] = new Bitmap[sizeGrille][sizeGrille];
         int listLenght = bitmaps.size();
         int tmp = 0;
         while(tmp < listLenght) {
             for(int i = 0; i < sizeGrille; i++) {
-                Log.d("Test", "entree boucle 1");
+
                 for(int j = 0; j < sizeGrille; j++) {
-                    Log.d("Test", "entree boucle 2");
                     matrixGrille[i][j] = bitmaps.get(tmp);
                     tmp = tmp + 1;
                 }
             }
         }
-
-        Log.d("Test", "fin while");
         return matrixGrille;
     }
 
