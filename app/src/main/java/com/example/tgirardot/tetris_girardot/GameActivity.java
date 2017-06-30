@@ -6,19 +6,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
 
 /**
  * Created by tgirardot on 26/06/17.
@@ -38,7 +33,6 @@ public class GameActivity extends Activity {
     private Chronometer timer;
 
     private ArrayList<Bitmap> mThumbIds = new ArrayList<>();
-    private ArrayList<Bitmap> mThumbOriginal = new ArrayList<>();
     private ArrayList<Bitmap> mThumbPuzzled = new ArrayList<>();
 
 
@@ -52,7 +46,6 @@ public class GameActivity extends Activity {
 
         int numPic = intent.getIntExtra("selectedImage", 0);
 
-
         final GridView gridview = (GridView) findViewById(R.id.gridview_game);
         gridview.setNumColumns(sizeGrille);
 
@@ -61,12 +54,12 @@ public class GameActivity extends Activity {
         timer.start();
 
 
-        switch(numPic) {
+        switch (numPic) { // Recupération de l'image suite au changement d'activité
             case 0:
-                 toPuzzle = BitmapFactory.decodeResource(getResources(), R.drawable.sample_2);
+                toPuzzle = BitmapFactory.decodeResource(getResources(), R.drawable.sample_2);
                 break;
             case 1:
-                 toPuzzle = BitmapFactory.decodeResource(getResources(), R.drawable.sample_3);
+                toPuzzle = BitmapFactory.decodeResource(getResources(), R.drawable.sample_3);
                 break;
             case 2:
                 toPuzzle = BitmapFactory.decodeResource(getResources(), R.drawable.sample_4);
@@ -97,45 +90,35 @@ public class GameActivity extends Activity {
         Log.d("sizeGrille", "Taille grille " + sizeGrille);
         Log.d("sizeGrille", "image numero  " + numPic);
 
-        switch (sizeGrille) {
+        // Oui c'est un switch dégeulasse, j'ai pas eu le temps de refactor en une belle fonction
+        switch (sizeGrille) { // découpage de l'image en bitmap pour faire les pieces de jeu
             case 3:
                 int by3 = _width / 3;
-                Log.d("sizeGrille", "By3 = " + by3);
-                Log.d("sizeGrille", "je vais aller dans la boucle");
 
-                for(int i = 0; i < 3; i++) {
-                    Log.d("sizeGrille", "je rentre dans la boucle");
-
+                for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
-                        Log.d("sizeGrille", "je plop la boucle");
-
-                        mThumbIds.add(Bitmap.createBitmap(toPuzzle,(by3 * j), (by3 * i), by3, by3  ));
-                        Log.d("sizeGrille", "je suis dans la boucle");
+                        mThumbIds.add(Bitmap.createBitmap(toPuzzle, (by3 * j), (by3 * i), by3, by3));
                     }
                 }
-                Log.d("sizeGrille", "je suis passee dans la boucle");
-
+                // Suppression de la dernière case + ajout case blanche
                 mThumbIds.remove(8);
-                Log.d("Test", "Before create");
-                btn_tmp = Bitmap.createBitmap(by3,by3, Bitmap.Config.ALPHA_8);
-                Log.d("Test", "after create");
+                btn_tmp = Bitmap.createBitmap(by3, by3, Bitmap.Config.ALPHA_8);
                 mThumbIds.add(btn_tmp);
-                Log.d("Test", "after add");
                 emptyCase = btn_tmp;
 
                 break;
             case 4:
                 int by4 = _width / 4;
 
-                for(int i = 0; i < 4; i++) {
+                for (int i = 0; i < 4; i++) {
                     for (int j = 0; j < 4; j++) {
-                        mThumbIds.add(Bitmap.createBitmap(toPuzzle,by4 * j, by4 * i, by4, by4  ));
+                        mThumbIds.add(Bitmap.createBitmap(toPuzzle, by4 * j, by4 * i, by4, by4));
 
                     }
                 }
-
+                // Suppression de la dernière case + ajout case blanche
                 mThumbIds.remove(15);
-                btn_tmp = Bitmap.createBitmap(by4,by4, Bitmap.Config.ALPHA_8);
+                btn_tmp = Bitmap.createBitmap(by4, by4, Bitmap.Config.ALPHA_8);
                 mThumbIds.add(btn_tmp);
                 emptyCase = btn_tmp;
 
@@ -143,46 +126,44 @@ public class GameActivity extends Activity {
             case 5:
                 int by5 = _width / 5;
 
-                for(int i = 0; i < 5; i++) {
+                for (int i = 0; i < 5; i++) {
                     for (int j = 0; j < 5; j++) {
-                        mThumbIds.add(Bitmap.createBitmap(toPuzzle,by5 * j, by5 * i, by5, by5  ));
+                        mThumbIds.add(Bitmap.createBitmap(toPuzzle, by5 * j, by5 * i, by5, by5));
 
                     }
                 }
+                // Suppression de la dernière case + ajout case blanche
                 mThumbIds.remove(24);
-                btn_tmp = Bitmap.createBitmap(by5,by5, Bitmap.Config.ALPHA_8);
+                btn_tmp = Bitmap.createBitmap(by5, by5, Bitmap.Config.ALPHA_8);
                 mThumbIds.add(btn_tmp);
                 emptyCase = btn_tmp;
 
                 break;
             default:
                 int by6 = _width / 3;
-
-                for(int i = 0; i < 3; i++) {
+                for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
-                        mThumbIds.add(Bitmap.createBitmap(toPuzzle,by6 * j, by6 * i, by6, by6  ));
+                        mThumbIds.add(Bitmap.createBitmap(toPuzzle, by6 * j, by6 * i, by6, by6));
 
                     }
                 }
+                // Suppression de la dernière case + ajout case blanche
                 mThumbIds.remove(8);
-                Log.d("Test", "Before create");
-                btn_tmp = Bitmap.createBitmap(by6,by6, Bitmap.Config.ALPHA_8);
-                Log.d("Test", "after create");
+                btn_tmp = Bitmap.createBitmap(by6, by6, Bitmap.Config.ALPHA_8);
                 mThumbIds.add(btn_tmp);
-                Log.d("Test", "after add");
                 emptyCase = btn_tmp;
                 break;
         }
 
         Bitmap matrixGrilleOriginel[][] = createMatrice(sizeGrille, mThumbIds);
 
-        mThumbPuzzled = randomizeGrid(sizeGrille, mThumbIds, matrixGrilleOriginel);
-        mThumbPuzzled = randomizeGrid(sizeGrille, mThumbPuzzled, matrixGrilleOriginel);
+        mThumbPuzzled = randomizeGrid(sizeGrille, mThumbIds);
+        mThumbPuzzled = randomizeGrid(sizeGrille, mThumbPuzzled);
 
         Log.d("Test", "mThumbIds = " + mThumbIds);
         Log.d("Test", "mThumbPuz = " + mThumbPuzzled);
 
-        if(mThumbPuzzled.equals(mThumbIds)) {
+        if (mThumbPuzzled.equals(mThumbIds)) { // On s'amuse ?
             Log.d("test", "ELLES SONT IDENTIQUES");
         } else {
             Log.d("test", "ELLES NE SONT PAS IDENTIQUE");
@@ -191,6 +172,8 @@ public class GameActivity extends Activity {
         final ImageAdapterBitmap myadapter = new ImageAdapterBitmap(this, mThumbPuzzled);
         gridview.setAdapter(myadapter);
 
+        // Evènements sur les éléments de la grille
+        // Vérifie si le mouvement est possible pour une pièce + déplacement piece + condition victoire
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -198,16 +181,16 @@ public class GameActivity extends Activity {
                 Log.d("test", "Image = " + mThumbPuzzled.get(position));
                 Bitmap tmpMatrix[][] = createMatrice(sizeGrille, mThumbPuzzled);
 
-                _mouvement = isMouvementOk(sizeGrille,emptyCase,position, mThumbPuzzled, tmpMatrix);
-                if(_mouvement) {
+                _mouvement = isMouvementOk(sizeGrille, emptyCase, position, mThumbPuzzled, tmpMatrix);
+                if (_mouvement) {
                     mThumbPuzzled = deplacementPiece(sizeGrille, emptyCase, position, mThumbPuzzled, tmpMatrix);
                     Log.d("Test", "mThumbIds = " + mThumbIds);
                     Log.d("Test", "mThumbPuz = " + mThumbPuzzled);
                     Log.d("test", "Le mouvement est possible");
                     gridview.setAdapter(new ImageAdapterBitmap(GameActivity.this, mThumbPuzzled));
-                   // myadapter.notifyDataSetChanged();
-                   // gridview.setAdapter(myadapter);
-                    if(mThumbPuzzled.equals(mThumbIds)) {
+                    // myadapter.notifyDataSetChanged();
+                    // gridview.setAdapter(myadapter); // NE MARCHE PAS
+                    if (mThumbPuzzled.equals(mThumbIds)) {
                         timer.stop();
                         Long temps = timer.getBase() - SystemClock.elapsedRealtime();
                         Log.d("victory", "Vous avez gagné  en  " + temps);
@@ -218,34 +201,34 @@ public class GameActivity extends Activity {
             }
         });
 
-        Button buttonStart = (Button) findViewById(R.id.buttonStart);
+        // Vous aviez dis qu'il fallait du code pour faire des commentaires. Vu que je n'ai pas le premier,
+        // je me lâche dans les seconds 0/
 
     }
-
-    public ArrayList<Bitmap> deplacementPiece(int sizeGrille, Bitmap emptyCase, int position, ArrayList<Bitmap> mThumb, Bitmap[][] matrice ) {
+    // Deplacement des pièces. Le titre est explicite non ?
+    public ArrayList<Bitmap> deplacementPiece(int sizeGrille, Bitmap emptyCase, int position, ArrayList<Bitmap> mThumb, Bitmap[][] matrice) {
 
         ArrayList<Bitmap> newPuzzled = mThumb;
 
-        for(int i = 0; i < sizeGrille; i++){
-            for(int j = 0; j < sizeGrille; j++) {
+        for (int i = 0; i < sizeGrille; i++) {
+            for (int j = 0; j < sizeGrille; j++) {
 
-                if(matrice[i][j] == mThumb.get(position)) {
-                    Log.d("plp", "coucou");
+                if (matrice[i][j] == mThumb.get(position)) {
 
-                    if( (j >0) && (matrice[i][j - 1] == emptyCase)){ // cas déplacement vers le haut
+                    if ((j > 0) && (matrice[i][j - 1] == emptyCase)) { // cas déplacement vers le haut
                         matrice[i][j - 1] = matrice[i][j];
                         matrice[i][j] = emptyCase;
                         Log.d("test", "deplacement vers haut");
-                    } else if( (j < (sizeGrille - 1)) && (matrice[i][j  + 1] == emptyCase )){ // cas déplacement vers le bas
+                    } else if ((j < (sizeGrille - 1)) && (matrice[i][j + 1] == emptyCase)) { // cas déplacement vers le bas
                         matrice[i][j + 1] = matrice[i][j];
                         matrice[i][j] = emptyCase;
                         Log.d("test", "deplacement vers bas");
-                    } else if( (i < (sizeGrille - 1)) && (matrice[i + 1][j] == emptyCase )){ // cas déplacement vers la droite
+                    } else if ((i < (sizeGrille - 1)) && (matrice[i + 1][j] == emptyCase)) { // cas déplacement vers la droite
                         matrice[i + 1][j] = matrice[i][j];
                         matrice[i][j] = emptyCase;
                         Log.d("test", "deplacement vers droite");
-                    } else if( (i > 0) && (matrice[i - 1][j] == emptyCase )){ // cas déplacement vers la gauche
-                        matrice[i - 1][j]= matrice[i][j];
+                    } else if ((i > 0) && (matrice[i - 1][j] == emptyCase)) { // cas déplacement vers la gauche
+                        matrice[i - 1][j] = matrice[i][j];
                         matrice[i][j] = emptyCase;
                         Log.d("test", "deplacement vers gauche");
                     }
@@ -255,35 +238,34 @@ public class GameActivity extends Activity {
             }
         }
 
-
         newPuzzled = matrixToArray(sizeGrille, matrice);
 
-
-        return  newPuzzled;
+        return newPuzzled;
     }
 
+    // Vérification si déplacement possible
     public boolean isMouvementOk(int sizeGrille, Bitmap emptyCase, int position, ArrayList<Bitmap> mThumb, Bitmap[][] matrice) {
 
         boolean mouvementPossible = false;
 
-        for(int i = 0; i < sizeGrille; i++){
-            for(int j = 0; j < sizeGrille; j++) {
+        for (int i = 0; i < sizeGrille; i++) {
+            for (int j = 0; j < sizeGrille; j++) {
 
-                if(matrice[i][j] == mThumb.get(position)) {
+                if (matrice[i][j] == mThumb.get(position)) {
 
-                    if( (j > 0) && (matrice[i ][j - 1] == emptyCase )){ // cas déplacement vers le haut
+                    if ((j > 0) && (matrice[i][j - 1] == emptyCase)) { // cas déplacement vers le haut
                         mouvementPossible = true;
                     }
 
-                    if( (j < (sizeGrille - 1)) && (matrice[i][j  + 1] == emptyCase )){ // cas déplacement vers le bas
+                    if ((j < (sizeGrille - 1)) && (matrice[i][j + 1] == emptyCase)) { // cas déplacement vers le bas
                         mouvementPossible = true;
                     }
 
-                    if( (i < (sizeGrille - 1)) && (matrice[i + 1][j] == emptyCase )){ // cas déplacement vers la droite
+                    if ((i < (sizeGrille - 1)) && (matrice[i + 1][j] == emptyCase)) { // cas déplacement vers la droite
                         mouvementPossible = true;
                     }
 
-                    if( (i > 0) && (matrice[i - 1][j] == emptyCase )){ // cas déplacement vers la droite
+                    if ((i > 0) && (matrice[i - 1][j] == emptyCase)) { // cas déplacement vers la droite
                         mouvementPossible = true;
                     }
                 }
@@ -293,15 +275,16 @@ public class GameActivity extends Activity {
         return mouvementPossible;
     }
 
-    public Bitmap[][] createMatrice(int sizeGrille, ArrayList<Bitmap> bitmaps){
+    // Transforme un ArrayList en matrice
+    public Bitmap[][] createMatrice(int sizeGrille, ArrayList<Bitmap> bitmaps) {
 
         Bitmap matrixGrille[][] = new Bitmap[sizeGrille][sizeGrille];
         int listLenght = bitmaps.size();
         int tmp = 0;
-        while(tmp < listLenght) {
-            for(int i = 0; i < sizeGrille; i++) {
+        while (tmp < listLenght) {
+            for (int i = 0; i < sizeGrille; i++) {
 
-                for(int j = 0; j < sizeGrille; j++) {
+                for (int j = 0; j < sizeGrille; j++) {
                     matrixGrille[i][j] = bitmaps.get(tmp);
                     tmp = tmp + 1;
                 }
@@ -310,68 +293,60 @@ public class GameActivity extends Activity {
         return matrixGrille;
     }
 
+    // Transforme une matrice en ArrayList
     public ArrayList<Bitmap> matrixToArray(int sizeGrille, Bitmap matrice[][]) {
 
-        // Log.d("test", "Entree matrix to array");
-
         ArrayList<Bitmap> listFromMatrix = new ArrayList<>();
-        for(int i = 0; i < sizeGrille; i++) {
-            for(int j = 0; j < sizeGrille; j++) {
-                //Log.d("test", "Entree matrix to array add");
+        for (int i = 0; i < sizeGrille; i++) {
+            for (int j = 0; j < sizeGrille; j++) {
+
                 listFromMatrix.add(matrice[i][j]);
-                // Log.d("test", "Entree matrix to array after add");
+
             }
         }
-
-        //  Log.d("test", "fin matrix to array");
 
         return listFromMatrix;
     }
 
-    public ArrayList<Bitmap> randomizeGrid(int sizeGrille, ArrayList<Bitmap> bitmapsOriginel, Bitmap matriceOriginel[][] ) {
+    // Mélange les pieces en partant de l'image originale.
+    public ArrayList<Bitmap> randomizeGrid(int sizeGrille, ArrayList<Bitmap> bitmapsOriginel) {
 
         Bitmap emptyCase = bitmapsOriginel.get((bitmapsOriginel.size() - 1));
         Bitmap matrixGrille[][] = new Bitmap[sizeGrille][sizeGrille];
 
         ArrayList<Bitmap> randomGrid = new ArrayList<>();
-        Log.d("test", "Entree RandomizeGrid");
 
         matrixGrille = createMatrice(sizeGrille, bitmapsOriginel);
 
-        for (int x = 0; x < 150; x++) {
+        for (int x = 0; x < 150; x++) { // Nombre de tour de mélange à faire
+            for (int i = 0; i < sizeGrille; i++) {
+                for (int j = 0; j < sizeGrille; j++) {
 
-            for(int i = 0; i < sizeGrille; i++) {
-                for(int j = 0; j < sizeGrille; j++) {
+                    if (matrixGrille[i][j] == emptyCase) { // La piece blanche est localisée dans la matrice
 
-                    if(matrixGrille[i][j] == emptyCase) {
-
-                        Random rand = new Random();
-                        int tmpRand = (int )(Math.random() * 4) + 1;
-                        // rand.nextInt(4)+1; //starts at 0, so add 1
+                        int tmpRand = (int) (Math.random() * 4) + 1;
 
                         switch (tmpRand) {
                             case 1: // cas haut
-                                if(j > 0) {
+                                if (j > 0) {
                                     matrixGrille[i][j] = matrixGrille[i][j - 1];
                                     matrixGrille[i][j - 1] = emptyCase;
-
                                 }
                                 break;
                             case 2: // cas droit
-                                if( i < (sizeGrille - 1 )) {
+                                if (i < (sizeGrille - 1)) {
                                     matrixGrille[i][j] = matrixGrille[i + 1][j];
                                     matrixGrille[i + 1][j] = emptyCase;
                                 }
                                 break;
                             case 3: // cas bas
-                                if(j > (sizeGrille - 1)) {
+                                if (j > (sizeGrille - 1)) {
                                     matrixGrille[i][j] = matrixGrille[i][j + 1];
                                     matrixGrille[i][j + 1] = emptyCase;
-
                                 }
                                 break;
                             case 4: // cas gauche
-                                if( i > 0) {
+                                if (i > 0) {
                                     matrixGrille[i][j] = matrixGrille[i - 1][j];
                                     matrixGrille[i - 1][j] = emptyCase;
                                 }
@@ -385,14 +360,12 @@ public class GameActivity extends Activity {
 
                 }
             }
-
-
         }
 
-         randomGrid = matrixToArray(sizeGrille, matrixGrille);
+        randomGrid = matrixToArray(sizeGrille, matrixGrille);
 
         return randomGrid;
     }
 
-
 }
+// Voilà c'est fini. Le cauchemard est terminé.

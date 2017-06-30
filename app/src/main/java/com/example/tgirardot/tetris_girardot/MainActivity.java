@@ -18,14 +18,13 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
     private GridView layout;
-    private TextView game_timer;
     private int sizeGrid = 3;
     private boolean sizeSelected = false;
     private boolean picSelected = false;
     private int numPic;
     private long idPic;
 
-    private   Integer[] mThumbIds = {
+    private   Integer[] mThumbIds = { // Les images du jeu
             R.drawable.sample_2, R.drawable.sample_3,
             R.drawable.sample_4, R.drawable.sample_5,
             R.drawable.sample_6, R.drawable.sample_7,
@@ -39,9 +38,10 @@ public class MainActivity extends Activity {
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ImageAdapter(this, mThumbIds));
 
-        Button button3 = (Button) findViewById(R.id.button1);
-        Button button4 = (Button) findViewById(R.id.button2);
-        Button button5 = (Button) findViewById(R.id.button3);
+        // Les boutons de tailles de grille
+        Button button3 = (Button) findViewById(R.id.button1); // 3x3
+        Button button4 = (Button) findViewById(R.id.button2); // 4x4
+        Button button5 = (Button) findViewById(R.id.button3); // 5x5
         final Button buttonGo = (Button) findViewById(R.id.button4);
 
         final TextView sizeText = (TextView) findViewById(R.id.text_view_id1);
