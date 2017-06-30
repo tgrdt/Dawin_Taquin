@@ -5,17 +5,20 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
 
 /**
  * Created by tgirardot on 26/06/17.
@@ -31,6 +34,8 @@ public class GameActivity extends Activity {
     private boolean _mouvement = false;
 
     private GridView game_layout;
+
+    private Chronometer timer;
 
     private ArrayList<Bitmap> mThumbIds = new ArrayList<>();
     private ArrayList<Bitmap> mThumbOriginal = new ArrayList<>();
@@ -50,6 +55,11 @@ public class GameActivity extends Activity {
 
         final GridView gridview = (GridView) findViewById(R.id.gridview_game);
         gridview.setNumColumns(sizeGrille);
+
+        timer = (Chronometer) findViewById(R.id.gameTimer);
+        timer.setFormat("Temps" + " - %s");
+        timer.start();
+
 
         switch(numPic) {
             case 0:
@@ -198,8 +208,10 @@ public class GameActivity extends Activity {
                    // myadapter.notifyDataSetChanged();
                    // gridview.setAdapter(myadapter);
                     if(mThumbPuzzled.equals(mThumbIds)) {
-                        Log.d("victory", "Vous avez gagné");
-                        Toast.makeText(GameActivity.this, "VICTORY", Toast.LENGTH_LONG);
+                        timer.stop();
+                        Long temps = timer.getBase() - SystemClock.elapsedRealtime();
+                        Log.d("victory", "Vous avez gagné  en  " + temps);
+                        Toast.makeText(GameActivity.this, "VICTOIRE EN " + temps, Toast.LENGTH_LONG);
                     }
 
                 }
@@ -322,12 +334,11 @@ public class GameActivity extends Activity {
         Bitmap matrixGrille[][] = new Bitmap[sizeGrille][sizeGrille];
 
         ArrayList<Bitmap> randomGrid = new ArrayList<>();
-        boolean changement = false;
         Log.d("test", "Entree RandomizeGrid");
 
         matrixGrille = createMatrice(sizeGrille, bitmapsOriginel);
 
-        for (int x = 0; x < 2; x++) {
+        for (int x = 0; x < 150; x++) {
 
             for(int i = 0; i < sizeGrille; i++) {
                 for(int j = 0; j < sizeGrille; j++) {
