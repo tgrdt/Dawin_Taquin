@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -37,8 +39,6 @@ public class GameActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
 
-
-        Log.d("A", "a");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitivity_game);
 
@@ -47,12 +47,9 @@ public class GameActivity extends Activity {
 
         int numPic = intent.getIntExtra("selectedImage", 0);
 
-        Log.d("Toto", "toaaaat");
 
-
-        GridView gridview = (GridView) findViewById(R.id.gridview_game);
+        final GridView gridview = (GridView) findViewById(R.id.gridview_game);
         gridview.setNumColumns(sizeGrille);
-
 
         switch(numPic) {
             case 0:
@@ -85,11 +82,8 @@ public class GameActivity extends Activity {
 
         }
 
-        Log.d("Toto", "totazerze");
-
         _width = toPuzzle.getWidth();
 
-        Log.d("Toto", "totdfsdfsdf");
         Log.d("sizeGrille", "Taille grille " + sizeGrille);
         Log.d("sizeGrille", "image numero  " + numPic);
 
@@ -172,10 +166,6 @@ public class GameActivity extends Activity {
 
         Bitmap matrixGrilleOriginel[][] = createMatrice(sizeGrille, mThumbIds);
 
-        //Bitmap matrixGrillePuzzled[][] = null;
-
-        //mThumbPuzzled = matrixToArray(sizeGrille, matrixGrilleOriginel);
-
         mThumbPuzzled = randomizeGrid(sizeGrille, mThumbIds, matrixGrilleOriginel);
         mThumbPuzzled = randomizeGrid(sizeGrille, mThumbPuzzled, matrixGrilleOriginel);
 
@@ -188,7 +178,8 @@ public class GameActivity extends Activity {
             Log.d("test", "ELLES NE SONT PAS IDENTIQUE");
         }
 
-
+        final ImageAdapterBitmap myadapter = new ImageAdapterBitmap(this, mThumbPuzzled);
+        gridview.setAdapter(myadapter);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -198,17 +189,65 @@ public class GameActivity extends Activity {
                 Bitmap tmpMatrix[][] = createMatrice(sizeGrille, mThumbPuzzled);
 
                 _mouvement = isMouvementOk(sizeGrille,emptyCase,position, mThumbPuzzled, tmpMatrix);
-                
+                if(_mouvement) {
+                    mThumbPuzzled = deplacementPiece(sizeGrille, emptyCase, position, mThumbPuzzled, tmpMatrix);
+                    Log.d("Test", "mThumbIds = " + mThumbIds);
+                    Log.d("Test", "mThumbPuz = " + mThumbPuzzled);
+                    Log.d("test", "Le mouvement est possible");
+                    gridview.setAdapter(new ImageAdapterBitmap(GameActivity.this, mThumbPuzzled));
+                   // myadapter.notifyDataSetChanged();
+                   // gridview.setAdapter(myadapter);
+                    if(mThumbPuzzled.equals(mThumbIds)) {
+                        Log.d("victory", "Vous avez gagné");
+                        Toast.makeText(GameActivity.this, "VICTORY", Toast.LENGTH_LONG);
+                    }
 
-
+                }
             }
         });
 
-        gridview.setAdapter(new ImageAdapterBitmap(this, mThumbPuzzled));
-
         Button buttonStart = (Button) findViewById(R.id.buttonStart);
-        Log.d("Toto", "tot");
 
+    }
+
+    public ArrayList<Bitmap> deplacementPiece(int sizeGrille, Bitmap emptyCase, int position, ArrayList<Bitmap> mThumb, Bitmap[][] matrice ) {
+
+        ArrayList<Bitmap> newPuzzled = mThumb;
+
+        for(int i = 0; i < sizeGrille; i++){
+            for(int j = 0; j < sizeGrille; j++) {
+
+                if(matrice[i][j] == mThumb.get(position)) {
+                    Log.d("plp", "coucou");
+
+                    if( (j >0) && (matrice[i][j - 1] == emptyCase)){ // cas déplacement vers le haut
+                        matrice[i][j - 1] = matrice[i][j];
+                        matrice[i][j] = emptyCase;
+                        Log.d("test", "deplacement vers haut");
+                    } else if( (j < (sizeGrille - 1)) && (matrice[i][j  + 1] == emptyCase )){ // cas déplacement vers le bas
+                        matrice[i][j + 1] = matrice[i][j];
+                        matrice[i][j] = emptyCase;
+                        Log.d("test", "deplacement vers bas");
+                    } else if( (i < (sizeGrille - 1)) && (matrice[i + 1][j] == emptyCase )){ // cas déplacement vers la droite
+                        matrice[i + 1][j] = matrice[i][j];
+                        matrice[i][j] = emptyCase;
+                        Log.d("test", "deplacement vers droite");
+                    } else if( (i > 0) && (matrice[i - 1][j] == emptyCase )){ // cas déplacement vers la gauche
+                        matrice[i - 1][j]= matrice[i][j];
+                        matrice[i][j] = emptyCase;
+                        Log.d("test", "deplacement vers gauche");
+                    }
+                    newPuzzled = matrixToArray(sizeGrille, matrice);
+                    return newPuzzled;
+                }
+            }
+        }
+
+
+        newPuzzled = matrixToArray(sizeGrille, matrice);
+
+
+        return  newPuzzled;
     }
 
     public boolean isMouvementOk(int sizeGrille, Bitmap emptyCase, int position, ArrayList<Bitmap> mThumb, Bitmap[][] matrice) {
@@ -288,12 +327,10 @@ public class GameActivity extends Activity {
 
         matrixGrille = createMatrice(sizeGrille, bitmapsOriginel);
 
-        for (int x = 0; x < 200; x++) {
+        for (int x = 0; x < 2; x++) {
 
             for(int i = 0; i < sizeGrille; i++) {
                 for(int j = 0; j < sizeGrille; j++) {
-
-                    changement = false;
 
                     if(matrixGrille[i][j] == emptyCase) {
 
@@ -306,7 +343,6 @@ public class GameActivity extends Activity {
                                 if(j > 0) {
                                     matrixGrille[i][j] = matrixGrille[i][j - 1];
                                     matrixGrille[i][j - 1] = emptyCase;
-                                    changement = true;
 
                                 }
                                 break;
@@ -314,29 +350,28 @@ public class GameActivity extends Activity {
                                 if( i < (sizeGrille - 1 )) {
                                     matrixGrille[i][j] = matrixGrille[i + 1][j];
                                     matrixGrille[i + 1][j] = emptyCase;
-                                    changement = true;
                                 }
                                 break;
                             case 3: // cas bas
                                 if(j > (sizeGrille - 1)) {
                                     matrixGrille[i][j] = matrixGrille[i][j + 1];
                                     matrixGrille[i][j + 1] = emptyCase;
-                                    changement = true;
+
                                 }
                                 break;
                             case 4: // cas gauche
                                 if( i > 0) {
                                     matrixGrille[i][j] = matrixGrille[i - 1][j];
                                     matrixGrille[i - 1][j] = emptyCase;
-                                    changement = true;
                                 }
                                 break;
                         }
+                        randomGrid = matrixToArray(sizeGrille, matrixGrille);
+                        matrixGrille = createMatrice(sizeGrille, randomGrid);
 
                     }
 
-                    randomGrid = matrixToArray(sizeGrille, matrixGrille);
-                    matrixGrille = createMatrice(sizeGrille, randomGrid);
+
                 }
             }
 
@@ -344,8 +379,6 @@ public class GameActivity extends Activity {
         }
 
          randomGrid = matrixToArray(sizeGrille, matrixGrille);
-
-        //  Log.d("test", "Fin  RandomizeGrid");
 
         return randomGrid;
     }
